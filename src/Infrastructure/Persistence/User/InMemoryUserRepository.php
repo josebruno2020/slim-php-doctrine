@@ -102,9 +102,6 @@ class InMemoryUserRepository implements UserRepository
     public function deleteUserById(int $id): void
     {
         $user = $this->findUserOfId($id);
-        if (!$user) {
-            throw new UserNotFoundException();
-        }
-        unset($this->users[$id]);
+        unset($this->users[$user->getId()]);
     }
 }
