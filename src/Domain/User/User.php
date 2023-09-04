@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\User;
 
+use App\Domain\Validation\DomainValidationHelper;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
@@ -15,7 +16,7 @@ use JsonSerializable;
 class User implements JsonSerializable
 {
     #[Id, Column(type: 'integer'), GeneratedValue(strategy: 'AUTO')]
-    private ?int $id;
+    private int $id;
 
     #[Column(type: 'string', unique: true, nullable: false)]
     private string $username;
@@ -25,15 +26,6 @@ class User implements JsonSerializable
 
     #[Column(type: 'string', nullable: false)]
     private string $lastName;
-
-    public function __construct(?int $id, string $username, string $firstName, string $lastName)
-    {
-        $this->id = $id;
-        $this->username = strtolower($username);
-        $this->firstName = ucfirst($firstName);
-        $this->lastName = ucfirst($lastName);
-    }
-
     public function getId(): ?int
     {
         return $this->id;
@@ -54,6 +46,37 @@ class User implements JsonSerializable
         return $this->lastName;
     }
 
+    public function setUsername(?string $username): self
+    {
+        DomainValidationHelper::validateRequiredArgument(
+            argument: $username,
+            argumentName: "username"
+        );
+        $this->username = strtolower($username);
+        return $this;
+    }
+
+    public function setFirstName(?string $firstName): User
+    {
+        DomainValidationHelper::validateRequiredArgument(
+            argument: $firstName,
+            argumentName: "firstName"
+        );
+        $this->firstName = $firstName;
+        return $this;
+    }
+
+    public function setLastName(?string $lastName): User
+    {
+        DomainValidationHelper::validateRequiredArgument(
+            argument: $lastName,
+            argumentName: "lastName"
+        );
+        $this->lastName = $lastName;
+        return $this;
+    }
+
+
     #[\ReturnTypeWillChange]
     public function jsonSerialize(): array
     {
@@ -64,4 +87,12 @@ class User implements JsonSerializable
             'lastName' => $this->lastName,
         ];
     }
+
+    public function setId(int $id): User
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+
 }

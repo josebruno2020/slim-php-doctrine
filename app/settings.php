@@ -37,33 +37,19 @@ return function (ContainerBuilder $containerBuilder) {
                     // when 'dev_mode' is false.
                     'cache_dir' => APP_ROOT . '/var/doctrine',
 
-                    // List of paths where Doctrine will search for metadata.
-                    // Metadata can be either YML/XML files or PHP classes annotated
                     // with comments or PHP8 attributes.
                     'metadata_dirs' => [APP_ROOT . '/src/Domain'],
 
-                    // The parameters Doctrine needs to connect to your database.
-                    // These parameters depend on the driver (for instance the 'pdo_sqlite' driver
-                    // needs a 'path' parameter and doesn't use most of the ones shown in this example).
-                    // Refer to the Doctrine documentation to see the full list
-                    // of valid parameters: https://www.doctrine-project.org/projects/doctrine-dbal/en/current/reference/configuration.html
                     'connection' => [
-                        'driver' => 'pdo_mysql',
-                        'host' => 'localhost',
-                        'port' => 3306,
-                        'dbname' => 'slim',
-                        'user' => 'root',
-                        'password' => 'root',
+                        'driver' => $_ENV['DB_DRIVER'],
+                        'path' => $_ENV['DB_PATH'],
+//                        'host' => $_ENV['DB_HOST'],
+//                        'port' => $_ENV['DB_PORT'],
+//                        'dbname' => $_ENV['DB_NAME'],
+//                        'user' => $_ENV['DB_USER'],
+//                        'password' => $_ENV['DB_PASSWORD'],
                         'charset' => 'utf8'
                     ],
-
-                    'migrations_configuration' => [
-                        'orm_default' => [
-                            'directory' => APP_ROOT . '/src/Infrastructure/Doctrine/Migrations',
-                            'namespace' => 'App\Infrastructure\Doctrine\Migrations',
-                            'table' => 'migrations'
-                        ]
-                    ]
                 ]
             ]);
         }

@@ -48,4 +48,12 @@ class InMemoryUserRepository implements UserRepository
 
         return $this->users[$id];
     }
+
+    /**
+     * @param array{username: string, firstName: string, lastName: string} $data
+     */
+    public function createUser(array $data): void
+    {
+        // TODO: Implement createUser() method.
+    }
 }

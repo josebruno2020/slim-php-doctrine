@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Application\Actions;
 
+use App\Domain\DomainException\DomainInvalidArgumentException;
 use App\Domain\DomainException\DomainRecordNotFoundException;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -38,7 +39,7 @@ abstract class Action
 
         try {
             return $this->action();
-        } catch (DomainRecordNotFoundException $e) {
+        } catch (DomainRecordNotFoundException|DomainInvalidArgumentException $e) {
             throw new HttpNotFoundException($this->request, $e->getMessage());
         }
     }
@@ -52,7 +53,7 @@ abstract class Action
     /**
      * @return array|object
      */
-    protected function getFormData()
+    protected function getBody()
     {
         return $this->request->getParsedBody();
     }
@@ -73,7 +74,7 @@ abstract class Action
     /**
      * @param array|object|null $data
      */
-    protected function respondWithData($data = null, int $statusCode = 200): Response
+    protected function respondWithData(mixed $data = null, int $statusCode = 200): Response
     {
         $payload = new ActionPayload($statusCode, $data);
 
