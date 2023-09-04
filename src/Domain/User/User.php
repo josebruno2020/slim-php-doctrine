@@ -26,6 +26,15 @@ class User implements JsonSerializable
 
     #[Column(type: 'string', nullable: false)]
     private string $lastName;
+
+    public function __construct(?int $id = null, ?string $username = null, ?string $firstName = null, ?string $lastName = null)
+    {
+        $this->setId($id)
+            ->setUsername($username)
+            ->setFirstName($firstName)
+            ->setLastName($lastName);
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -62,7 +71,7 @@ class User implements JsonSerializable
             argument: $firstName,
             argumentName: "firstName"
         );
-        $this->firstName = $firstName;
+        $this->firstName = ucfirst($firstName);
         return $this;
     }
 
@@ -72,7 +81,7 @@ class User implements JsonSerializable
             argument: $lastName,
             argumentName: "lastName"
         );
-        $this->lastName = $lastName;
+        $this->lastName = ucfirst($lastName);
         return $this;
     }
 

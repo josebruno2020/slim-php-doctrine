@@ -25,7 +25,11 @@ class DoctrineUserRepository implements UserRepository
 
     public function findUserOfId(int $id): ?User
     {
-        return $this->em->getRepository(User::class)->find($id);
+        /**
+         * @var User $user
+         */
+        $user =  $this->em->getRepository(User::class)->find($id);
+        return $user;
     }
 
     /**

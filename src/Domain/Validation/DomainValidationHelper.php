@@ -6,6 +6,9 @@ use App\Domain\DomainException\DomainInvalidArgumentException;
 
 class DomainValidationHelper
 {
+    /**
+     * @throws DomainInvalidArgumentException
+     */
     public function validateRequiredArguments(array $arguments, array $data): void
     {
         $keys = array_keys($data);

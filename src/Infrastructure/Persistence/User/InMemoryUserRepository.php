@@ -54,6 +54,57 @@ class InMemoryUserRepository implements UserRepository
      */
     public function createUser(array $data): void
     {
-        // TODO: Implement createUser() method.
+        if (empty($this->users)) {
+            $userId = 1;
+        } else {
+            $lastUser = $this->users[count($this->users)];
+            $userId = $lastUser->getId() + 1;
+        }
+        $this->users[] = [
+            $userId => new User(
+                id: $userId,
+                username: $data['username'],
+                firstName: $data['firstName'],
+                lastName: $data['lastName']
+            )
+        ];
+    }
+
+    public function usernameExists(string $username, ?int $id = null): bool
+    {
+        $result = false;
+        foreach ($this->users as $user) {
+            if ($user->getId() !== $id && $user->getUsername() === $username) {
+                $result = true;
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * @param int $id
+     * @param array{username: string, firstName: string, lastName: string} $data
+     * @return void
+     * @throws UserNotFoundException
+     */
+    public function updateUserById(int $id, array $data): void
+    {
+        $user = $this->users[$id];
+        if (!$user) {
+            throw new UserNotFoundException();
+        }
+
+        $user->setUsername($data['username'])
+            ->setFirstName($data['firstName'])
+            ->setLastName($data['lastName']);
+    }
+
+    public function deleteUserById(int $id): void
+    {
+        $user = $this->findUserOfId($id);
+        if (!$user) {
+            throw new UserNotFoundException();
+        }
+        unset($this->users[$id]);
     }
 }

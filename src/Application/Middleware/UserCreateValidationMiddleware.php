@@ -39,7 +39,7 @@ class UserCreateValidationMiddleware implements Middleware
         }
         
         $id = $this->getPathParam($request, param: 'id');
-        
+
         if($this->repository->usernameExists($body['username'], $id)) {
             throw new HttpBadRequestException($request, "Campo [username] deve ser único.");
         }
